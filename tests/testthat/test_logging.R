@@ -53,9 +53,11 @@ test_that("Basic logging works correctly", {
   expect_more_than(newsize, oldsize)
   expect_equal(length(readLines(LOGFILE)), 3)
 
-  # sessionInfo added?
-  expect_true(closelog())
+  # non-simple (character, numeric) objects written?
+  expect_true(printlog(cars))
   expect_more_than(file.size(LOGFILE), newsize)
+
+  closelog()
 })
 
 test_that("logging sinks correctly", {
@@ -77,7 +79,13 @@ test_that("logging sinks correctly", {
   })
 })
 
-test_that("closelog handles special cases", {
+test_that("closelog works correctly", {
+
+  # sessionInfo added?
+  LOGFILE <- openlog("test", sink = FALSE)
+  oldsize <- file.size(LOGFILE)
+  expect_true(closelog())
+  expect_more_than(file.size(LOGFILE), oldsize)
 
   # suppressing sessionInfo data
   LOGFILE <- openlog("test", sink = FALSE)

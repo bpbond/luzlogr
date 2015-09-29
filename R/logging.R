@@ -66,15 +66,14 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
 } # openlog
 
 # -----------------------------------------------------------------------------
-#' Time-stamped output function
+#' Log a message
 #'
-#' @param msg A message to log (optional)
-#' @param ... Additional items to log (optional)
+#' @param ... Expressions to be printed to the log
 #' @param level Priority level (numeric, optional)
 #' @param ts Print preceding timestamp? (logical, optional)
 #' @param cr Print trailing newline? (logical, optional)
 #' @return Invisible success (TRUE) or failure (FALSE)
-#' @details Logs a message, which may consist of one or more printable objects
+#' @details Logs a message, which consists of zero or more printable objects
 #' @examples
 #' logfile <- openlog("test")
 #' printlog("message")
@@ -89,14 +88,16 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
 #' readLines(logfile)
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{closelog}}
-printlog <- function(msg = "", ..., level = 0, ts = TRUE, cr = TRUE) {
+printlog <- function(..., level = 0, ts = TRUE, cr = TRUE) {
 
   # Sanity checks
   assert_that(is.numeric(level))
   assert_that(is.logical(ts))
   assert_that(is.logical(cr))
 
-  # Make sure there's an open log file available to close
+  args <- list(...)
+
+  # Make sure there's an open log file available
   if(exists(LOGINFO, envir = PKG.ENV)) {
     loginfo <- get(LOGINFO, envir = PKG.ENV)
   } else {
@@ -112,8 +113,22 @@ printlog <- function(msg = "", ..., level = 0, ts = TRUE, cr = TRUE) {
       file <- loginfo$logfile
     }
 
+    # Print a timestamp, and then the object(s)
     if(ts) cat(date(), " ", file = file, append = TRUE)
-    cat(msg, ..., file = file, append = TRUE)
+    for(i in seq_along(args)) {
+      x <- args[[i]]
+      # simple objects are printed together on a line
+      if(mode(x) %in% c("numeric", "character")) {
+        cat(x, " ", file = file, append = TRUE)
+      } else { # more complex; have to let print() handle it
+        if(loginfo$sink) {
+          print(x)
+        } else {
+          capture.output(x, file = file, append = TRUE)
+        }
+      }
+    }
+
     if(cr) cat("\n", file = file, append = TRUE)
   }
 
