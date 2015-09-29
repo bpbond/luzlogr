@@ -1,4 +1,4 @@
-# Testing code for the JGCRIutils scripts in 'logging.R'
+# Testing code for logging functions
 
 context("logging")
 
@@ -45,13 +45,18 @@ test_that("Basic logging works correctly", {
   expect_true(file.exists(LOGFILE))
   expect_equal(length(readLines(LOGFILE)), 1)
 
+  # Blank log messages
+  expect_true(printlog())
+  expect_true(printlog(ts = FALSE, cr = FALSE))
+
   # log messages written?
   oldsize <- file.size(LOGFILE)
+  oldlines <- length(readLines(LOGFILE))
   expect_true(printlog("Line 1"))
   expect_true(printlog(1, "plus", 1, "equals", 1 + 1))
   newsize <- file.size(LOGFILE)
   expect_more_than(newsize, oldsize)
-  expect_equal(length(readLines(LOGFILE)), 3)
+  expect_equal(length(readLines(LOGFILE)) - oldlines, 2)
 
   # non-simple (character, numeric) objects written?
   expect_true(printlog(cars))

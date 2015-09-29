@@ -6,6 +6,8 @@
 \alias{luxlogr-package}
 \title{Lightweight logging for R}
 \description{
-Description here.
+Logging facilities for R scripts. Very lightweight, but supports message
+prioritization, echoing to screen (or not), timestamps, multiple open
+logs, etc.
 }
 

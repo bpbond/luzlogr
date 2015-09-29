@@ -1,4 +1,4 @@
 library(testthat)
-library(JGCRIutils)
+library(luxlogr)
 
-test_check("JGCRIutils")
+test_check("luxlogr")

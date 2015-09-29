@@ -2,14 +2,12 @@
 % Please edit documentation in R/logging.R
 \name{printlog}
 \alias{printlog}
-\title{Time-stamped output function}
+\title{Log a message}
 \usage{
-printlog(msg = "", ..., level = 0, ts = TRUE, cr = TRUE)
+printlog(..., level = 0, ts = TRUE, cr = TRUE)
 }
 \arguments{
-\item{msg}{A message to log (optional)}
-
-\item{...}{Additional items to log (optional)}
+\item{...}{Expressions to be printed to the log}
 
 \item{level}{Priority level (numeric, optional)}
 
@@ -21,10 +19,12 @@ printlog(msg = "", ..., level = 0, ts = TRUE, cr = TRUE)
 Invisible success (TRUE) or failure (FALSE)
 }
 \description{
-Time-stamped output function
+Log a message
 }
 \details{
-Logs a message, which may consist of one or more printable objects
+Logs a message, which consists of zero or more printable objects.
+If the current log was opened with \code{sink} = TRUE, the default,
+messages are printed to the screen, otherwise not.
 }
 \examples{
 logfile <- openlog("test")

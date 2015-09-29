@@ -4,8 +4,8 @@ Title: Lightweight R Logging
 Version: 0.1
 Date: 2015-09-29
 Authors@R: person("Ben", "Bond-Lamberty", email = "bondlamberty@pnnl.gov", role = c("aut", "cre"))
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: Lightweight R logging
+Maintainer: Ben Bond-Lamberty <bondlamberty@pnnl.gov>
+Description: Lightweight R logging.
 Imports:
     assertthat (>= 0.1)
 Depends:

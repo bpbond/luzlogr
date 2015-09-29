@@ -1,4 +1,4 @@
-# JGCRIutils logging functions
+# Logging functions
 
 PKG.ENV <- new.env()    # environment in which to store logging info
 LOGINFO <- ".loginfo"   # name of storage variable
@@ -73,7 +73,9 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
 #' @param ts Print preceding timestamp? (logical, optional)
 #' @param cr Print trailing newline? (logical, optional)
 #' @return Invisible success (TRUE) or failure (FALSE)
-#' @details Logs a message, which consists of zero or more printable objects
+#' @details Logs a message, which consists of zero or more printable objects.
+#' If the current log was opened with \code{sink} = TRUE, the default,
+#' messages are printed to the screen, otherwise not.
 #' @examples
 #' logfile <- openlog("test")
 #' printlog("message")
@@ -113,14 +115,16 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE) {
       file <- loginfo$logfile
     }
 
-    # Print a timestamp, and then the object(s)
+    # Print a timestamp...
     if(ts) cat(date(), " ", file = file, append = TRUE)
+
+    # ...and then the object(s)
     for(i in seq_along(args)) {
       x <- args[[i]]
       # simple objects are printed together on a line
       if(mode(x) %in% c("numeric", "character")) {
         cat(x, " ", file = file, append = TRUE)
-      } else { # more complex; have to let print() handle it
+      } else { # more complex; let print() handle it
         if(loginfo$sink) {
           print(x)
         } else {
