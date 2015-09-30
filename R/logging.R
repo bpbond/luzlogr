@@ -54,7 +54,8 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
                   logfile = logfile,
                   scriptname = scriptname,
                   sink = sink,
-                  sink.number = sink.number())
+                  sink.number = sink.number(),
+                  warnings = 0)
   assign(LOGINFO, loginfo, envir = PKG.ENV)
 
   if(sink) {
@@ -72,10 +73,12 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
 #' @param level Priority level (numeric, optional)
 #' @param ts Print preceding timestamp? (logical, optional)
 #' @param cr Print trailing newline? (logical, optional)
+#' @param warn Is this message an error or warning? (logical, optional)
 #' @return Invisible success (TRUE) or failure (FALSE)
 #' @details Logs a message, which consists of zero or more printable objects.
 #' If the current log was opened with \code{sink} = TRUE, the default,
-#' messages are printed to the screen, otherwise not.
+#' messages are printed to the screen, otherwise not. \code{warnlog} assumes
+#' that the message is a warning, which \code{printlog} does not.
 #' @examples
 #' logfile <- openlog("test")
 #' printlog("message")
@@ -90,7 +93,7 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
 #' readLines(logfile)
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{closelog}}
-printlog <- function(..., level = 0, ts = TRUE, cr = TRUE) {
+printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, warn = FALSE) {
 
   # Sanity checks
   assert_that(is.numeric(level))
@@ -107,12 +110,21 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE) {
     return(FALSE)
   }
 
-  # Messages are only printed if their level exceeds the log's level
-  if(level >= loginfo$loglevel) {
+  # Messages are only printed if their level exceeds the log's level (or an error)
+  if(level >= loginfo$loglevel | warn) {
     if(loginfo$sink) { # If capturing everything, output to screen
       file <- stdout()
     } else {  # otherwise, file
       file <- loginfo$logfile
+    }
+
+    # Print a special message if warning (flag) condition
+    if(warn) {
+      warnmsg <- "Warning message\n"
+      if(loginfo$sink) {
+        message(warnmsg)
+      }
+      cat(warnmsg, file = file, append = TRUE)
     }
 
     # Print a timestamp...
@@ -138,6 +150,11 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE) {
 
   invisible(TRUE)
 } # printlog
+
+# -----------------------------------------------------------------------------
+#' @rdname printlog
+#' @export
+warnlog <- function(...) printlog(..., warn = TRUE)
 
 # -----------------------------------------------------------------------------
 #' Close current logfile

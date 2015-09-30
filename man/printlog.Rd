@@ -2,9 +2,12 @@
 % Please edit documentation in R/logging.R
 \name{printlog}
 \alias{printlog}
+\alias{warnlog}
 \title{Log a message}
 \usage{
-printlog(..., level = 0, ts = TRUE, cr = TRUE)
+printlog(..., level = 0, ts = TRUE, cr = TRUE, warn = FALSE)
+
+warnlog(...)
 }
 \arguments{
 \item{...}{Expressions to be printed to the log}
@@ -14,6 +17,8 @@ printlog(..., level = 0, ts = TRUE, cr = TRUE)
 \item{ts}{Print preceding timestamp? (logical, optional)}
 
 \item{cr}{Print trailing newline? (logical, optional)}
+
+\item{warn}{Is this message an error or warning? (logical, optional)}
 }
 \value{
 Invisible success (TRUE) or failure (FALSE)
@@ -24,7 +29,8 @@ Log a message
 \details{
 Logs a message, which consists of zero or more printable objects.
 If the current log was opened with \code{sink} = TRUE, the default,
-messages are printed to the screen, otherwise not.
+messages are printed to the screen, otherwise not. \code{warnlog} assumes
+that the message is a warning, which \code{printlog} does not.
 }
 \examples{
 logfile <- openlog("test")

@@ -3,4 +3,5 @@
 export(closelog)
 export(openlog)
 export(printlog)
+export(warnlog)
 import(assertthat)
