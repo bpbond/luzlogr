@@ -16,19 +16,19 @@ help(package = 'luzlogr')
 
 ## Logging
 
-Three functions - `openlog()`, `printlog()`, `closelog()` - provide logging of script output. Lightweight but provides priority levels, custom logfiles, capturing all output (via `sink`), etc. For example:
+Three functions - `openlog()`, `printlog()`, `closelog()` - provide logging of script output. They are lightweight but provide priority levels, capturing all output (via `sink`), logging to a text file or arbitrary [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html). For example:
 ```R
-openlog("test")
+openlog("test.log")
 printlog("message")
 print("This will also appear in the logfile, as sink is TRUE by default")
 closelog()
 ```
-The resulting log file `./output/test/test.log.txt` looks like this:
+The resulting log file `test.log` looks like this:
 ```
 Thu Sep 17 08:46:59 2015  Opening ./output/test/test.log.txt
 Thu Sep 17 08:46:59 2015  message
 [1] "This will also appear in the logfile, as sink is TRUE by default"
-Thu Sep 17 08:46:59 2015  Closing ./output/test/test.log.txt
+Thu Sep 17 08:46:59 2015  Closing test.log  flags = 0
 -------
 R version 3.2.0 (2015-04-16)
 Platform: x86_64-apple-darwin13.4.0 (64-bit)
@@ -46,13 +46,15 @@ printlog("Error!", flag = TRUE)
 closelog(sessionInfo = FALSE)
 ```
 
+results in:
+
 ```
 Thu Oct  1 21:38:01 2015  Opening  ./output/test/test.log.txt  
 Thu Oct  1 21:38:34 2015  This message will appear  
 Thu Oct  1 21:38:45 2015  So will this (level 0 by default)  
 ** Flagged message: **
 Thu Oct  1 21:39:13 2015  Error!  
-Thu Oct  1 21:39:17 2015  Closing  test.log.txt  flags =  1  
+Thu Oct  1 21:39:17 2015  Closing test.log.txt  flags =  1  
 ```
 
 For more details, see the documentation.
