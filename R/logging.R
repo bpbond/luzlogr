@@ -3,18 +3,18 @@
 # -----------------------------------------------------------------------------
 #' Open a new logfile
 #'
-#' @param scriptname Name of script (and thus logfile)
+#' @param file Name of logfile (character or writeable \code{\link{connection}})
 #' @param loglevel Minimum priority level (numeric, optional)
-#' @param logfile Override default logfile (character or \code{\link{connection}}, optional)
 #' @param append Append to logfile? (logical, optional)
 #' @param sink Send all console output to logfile? (logical, optional)
 #' @return Invisible fully-qualified name of log file
 #' @details Open a new logfile. If \code{sink} is TRUE (the default), all
 #' screen output will be captured (via \code{\link{sink}}).
 #' Re-opening a logfile will erase the previous output unless \code{append}
-#' is TRUE. Note that messages will only appear in the logfile if their
-#' \code{level} exceeds \code{loglevel}; this allows you to easily change
-#' the amount of detail being logged.
+#' is TRUE.
+#' @note Messages will only appear in the logfile if their \code{level} exceeds
+#' the log's \code{loglevel}; this allows you to easily change the amount of
+#' detail being logged.
 #' @examples
 #' logfile <- openlog("test")
 #' printlog("message")
@@ -23,32 +23,37 @@
 #' readLines(logfile)
 #' @export
 #' @seealso \code{\link{printlog}} \code{\link{closelog}}
-openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
-                    append = FALSE, sink = TRUE) {
+openlog <- function(file, loglevel = -Inf, append = FALSE, sink = TRUE) {
 
   # Sanity checks
-  assert_that(is.character(scriptname))
   assert_that(is.numeric(loglevel))
   assert_that(is.logical(append))
   assert_that(is.logical(sink))
 
-  # Get logfile name; remove file if already present and not appending
-  if(is.null(logfile)) {
-    logfile <- file.path(outputdir(scriptname), paste0(scriptname, ".log.txt"))
+  if(is.character(file)) {  # character filename
+    description <- file
+    closeit <- FALSE
+    if(file.exists(file) & !append) {
+      file.remove(file)
+    }
+  } else if(inherits(file, "connection")) {  # connection
+    closeit <- !isOpen(file)
+    if(!isOpen(file)) {
+      open(file, if(append) "a" else "w")
+    }
+    description <- summary(file)$description
   }
-  if(file.exists(logfile) & !append) {
-    file.remove(logfile)
-  }
+  else stop("'file' must be a character string or a connection")
 
   # Create a new log in our internal data structure
-  newlog(logfile, loglevel, sink)
+  newlog(logfile = file, loglevel = loglevel, sink = sink, closeit = closeit)
 
   if(sink) {
-    sink(logfile, split = TRUE, append = append)
+    sink(file, split = TRUE, append = append)
   }
 
-  printlog("Opening", logfile, level = Inf)
-  invisible(logfile)
+  printlog("Opening", description, level = Inf)
+  invisible(description)
 } # openlog
 
 # -----------------------------------------------------------------------------
@@ -64,6 +69,9 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
 #' If the current log was opened with \code{sink} = TRUE, the default,
 #' messages are printed to the screen, otherwise not. \code{flaglog} assumes
 #' that the message is to be flagged, which \code{printlog} does not.
+#' @note Messages will only appear in the logfile if their \code{level} exceeds
+#' the log's \code{loglevel}; this allows you to easily change the amount of
+#' detail being logged.
 #' @examples
 #' logfile <- openlog("test")
 #' printlog("message")
@@ -149,50 +157,31 @@ flaglog <- function(...) printlog(..., flag = TRUE)
 closelog <- function(sessionInfo = TRUE) {
 
   # Make sure there's an open log file available to close
-  flags <- getlogdata("flags")
-  if(is.null(flags)) return(FALSE)
   logfile <- getlogdata("logfile")
+  if(is.null(logfile)) return(NULL)
 
-  printlog("Closing", basename(logfile),
-           "flags =", flags, level = Inf)
+  if(is.character(logfile))
+    description <- basename(logfile)
+  else
+    description <- summary(logfile)$description
 
-  # Print sessionInfo() to file
-  if(sessionInfo) try({
-    sink(logfile, append = TRUE)
-    cat("-------\n")
-    print(sessionInfo())
-    sink()
-  })
+  flags <- getlogdata("flags")
+  printlog("Closing", description, "flags =", flags, level = Inf)
 
   # Remove sink, if applicable
-  if(getlogdata("sink") & getlogdata("sink.number")) sink()
+  if(getlogdata("sink") & sink.number()) sink()
+
+  # Append sessionInfo() to file
+  if(sessionInfo) {
+    cat("-------\n", file = logfile, append = TRUE)
+    capture.output(sessionInfo(), file = logfile, append = TRUE)
+  }
+
+  # Close file or connection, if necessary
+  if(getlogdata("closeit")) close(logfile)
 
   # Remove log from our internal data structure
   removelog()
 
   invisible(flags)
 } # closelog
-
-# -----------------------------------------------------------------------------
-#' Return output directory
-#'
-#' @param scriptname Name of script (or output folder name)
-#' @param scriptfolder Script-specific output folder? (logical, optional)
-#' @return Output directory
-#' @details Return output directory (perhaps inside a script-specific folder)
-#' If caller specifies `scriptfolder=FALSE`, return OUTPUT_DIR
-#' If caller specifies `scriptfolder=TRUE` (default), return OUTPUT_DIR/SCRIPTNAME
-#' @keywords internal
-outputdir <- function(scriptname, scriptfolder = TRUE) {
-
-  # Sanity checks
-  assert_that(is.character(scriptname))
-  assert_that(is.logical(scriptfolder))
-
-  odir <- "./output"   # TODO: should probably make this customizable
-  if(scriptfolder)
-    odir <- file.path(odir, sub(".R$", "", scriptname))
-  if(!file.exists(odir))
-    try(dir.create(odir, recursive = TRUE))
-  odir
-} # outputdir

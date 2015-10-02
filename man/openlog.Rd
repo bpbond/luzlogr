@@ -4,15 +4,12 @@
 \alias{openlog}
 \title{Open a new logfile}
 \usage{
-openlog(scriptname, loglevel = -Inf, logfile = NULL, append = FALSE,
-  sink = TRUE)
+openlog(file, loglevel = -Inf, append = FALSE, sink = TRUE)
 }
 \arguments{
-\item{scriptname}{Name of script (and thus logfile)}
+\item{file}{Name of logfile (character or writeable \code{\link{connection}})}
 
 \item{loglevel}{Minimum priority level (numeric, optional)}
-
-\item{logfile}{Override default logfile (character or \code{\link{connection}}, optional)}
 
 \item{append}{Append to logfile? (logical, optional)}
 
@@ -28,9 +25,12 @@ Open a new logfile
 Open a new logfile. If \code{sink} is TRUE (the default), all
 screen output will be captured (via \code{\link{sink}}).
 Re-opening a logfile will erase the previous output unless \code{append}
-is TRUE. Note that messages will only appear in the logfile if their
-\code{level} exceeds \code{loglevel}; this allows you to easily change
-the amount of detail being logged.
+is TRUE.
+}
+\note{
+Messages will only appear in the logfile if their \code{level} exceeds
+the log's \code{loglevel}; this allows you to easily change the amount of
+detail being logged.
 }
 \examples{
 logfile <- openlog("test")

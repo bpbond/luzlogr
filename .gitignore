@@ -1,7 +1,3 @@
 .Rproj.user
 .Rhistory
 .RData
-
-# testing
-test/
-tests/testthat/output/

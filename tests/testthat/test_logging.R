@@ -30,12 +30,26 @@ test_that("openlog handles special cases", {
   openlog("test", sink = FALSE, append = TRUE)
   closelog()
   expect_more_than(file.size(LOGFILE), oldsize)
+  file.remove(LOGFILE)
 
-  # Custom logfile
-  tf <- tempfile()
-  openlog("test", logfile = tf, sink = FALSE)
+  # Connections - not already open
+  test <- gzfile("test.txt.gz")
+  LOGFILE <- openlog(test, sink = FALSE)
+  expect_true(isOpen(test))
   closelog()
-  expect_true(file.exists(tf))
+  expect_error(isOpen(test))  # now closed and unavailable
+  expect_true(file.exists(LOGFILE))
+  file.remove(LOGFILE)
+
+  # Connections - already open
+  test <- gzfile("test.txt.gz")
+  open(test, "w")
+  LOGFILE <- openlog(test, sink = FALSE)
+  expect_true(isOpen(test))
+  closelog()
+  expect_true(isOpen(test))  # now closed and unavailable
+  expect_true(file.exists(LOGFILE))
+  file.remove(LOGFILE)
 })
 
 test_that("Basic logging works correctly", {
@@ -63,6 +77,7 @@ test_that("Basic logging works correctly", {
   expect_more_than(file.size(LOGFILE), newsize)
 
   closelog()
+  file.remove(LOGFILE)
 })
 
 test_that("logging sinks correctly", {
@@ -82,6 +97,8 @@ test_that("logging sinks correctly", {
     expect_equal(sink.number(), sn + 1)
     closelog()
   })
+
+  file.remove(LOGFILE)
 })
 
 test_that("closelog works correctly", {
@@ -107,6 +124,8 @@ test_that("closelog works correctly", {
   openlog("test", sink = FALSE)
   closelog(sessionInfo = FALSE)
   expect_less_than(file.size(LOGFILE), oldsize)
+
+  file.remove(LOGFILE)
 })
 
 test_that("Priority levels work correctly", {
@@ -123,4 +142,5 @@ test_that("Priority levels work correctly", {
   expect_more_than(file.size(LOGFILE), size2)
 
   closelog()
+  file.remove(LOGFILE)
 })

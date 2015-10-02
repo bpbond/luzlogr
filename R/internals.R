@@ -11,14 +11,16 @@ LOGINFO <- ".loginfo"   # name of storage variable
 #' @param logfile Name of log file
 #' @param loglevel Minimum priority level (numeric, optional)
 #' @param sink Send all console output to logfile? (logical, optional)
+#' @param closeit File should be closed when log closes?
 #' @details This handles internal data tracking only, not the file on disk.
 #' @keywords internal
-newlog <- function(logfile, loglevel, sink) {
+newlog <- function(logfile, loglevel, sink, closeit) {
 
   # Sanity checks
-  assert_that(is.character(logfile))
+  assert_that(is.character(logfile) | inherits(logfile, "connection"))
   assert_that(is.numeric(loglevel))
   assert_that(is.logical(sink))
+  assert_that(is.logical(closeit))
 
   # If log info already exists, close the previous file
   if(exists(LOGINFO, envir = PKG.ENV)) {
@@ -29,6 +31,7 @@ newlog <- function(logfile, loglevel, sink) {
   loginfo <- list(logfile = logfile,
                   loglevel = loglevel,
                   sink = sink,
+                  closeit = closeit,
                   sink.number = sink.number(),
                   flags = 0)
 
@@ -64,14 +67,10 @@ getlogdata <- function(datum) {
     return(NULL)
   }
 
-  switch(datum,
-         logfile = loginfo$logfile,
-         loglevel = loginfo$loglevel,
-         sink = loginfo$sink,
-         sink.number = loginfo$sink.number,
-         flags = loginfo$flags,
-         stop("Unknown data requested:", datum)
-  )
+  if(!datum %in% names(loginfo))
+    stop("Unknown data requested:", datum)
+
+  loginfo[[datum]]
 }
 
 # -----------------------------------------------------------------------------
