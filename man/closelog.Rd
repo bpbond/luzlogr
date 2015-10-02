@@ -10,7 +10,7 @@ closelog(sessionInfo = TRUE)
 \item{sessionInfo}{Print \code{\link{sessionInfo}} output? (logical, optional)}
 }
 \value{
-Invisible success (TRUE) or failure (FALSE)
+Number of flagged messages (numeric)
 }
 \description{
 Close current logfile

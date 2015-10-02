@@ -1,8 +1,5 @@
 # Logging functions
 
-PKG.ENV <- new.env()    # environment in which to store logging info
-LOGINFO <- ".loginfo"   # name of storage variable
-
 # -----------------------------------------------------------------------------
 #' Open a new logfile
 #'
@@ -43,20 +40,8 @@ openlog <- function(scriptname, loglevel = -Inf, logfile = NULL,
     file.remove(logfile)
   }
 
-  # If log info already exists, close the previous file
-  if(exists(LOGINFO, envir = PKG.ENV)) {
-    warning("Closing previous log file")
-    closelog()
-  }
-
-  # Create a (hidden) variable in the package environment to store log info
-  loginfo <- list(loglevel = loglevel,
-                  logfile = logfile,
-                  scriptname = scriptname,
-                  sink = sink,
-                  sink.number = sink.number(),
-                  flags = 0)
-  assign(LOGINFO, loginfo, envir = PKG.ENV)
+  # Create a new log in our internal data structure
+  newlog(logfile, loglevel, sink)
 
   if(sink) {
     sink(logfile, split = TRUE, append = append)
@@ -103,29 +88,24 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
   args <- list(...)
 
   # Make sure there's an open log file available
-  if(exists(LOGINFO, envir = PKG.ENV)) {
-    loginfo <- get(LOGINFO, envir = PKG.ENV)
-  } else {
-    warning("No log file available")
-    return(FALSE)
-  }
+  loglevel <- getlogdata("loglevel")
+  if(is.null(loglevel)) return(FALSE)
 
   # Messages are only printed if their level exceeds the log's level (or an error)
-  if(level >= loginfo$loglevel | flag) {
-    if(loginfo$sink) { # If capturing everything, output to screen
+  if(level >= loglevel | flag) {
+    if(getlogdata("sink")) { # If capturing everything, output to screen
       file <- stdout()
     } else {  # otherwise, file
-      file <- loginfo$logfile
+      file <- getlogdata("logfile")
     }
 
     # Print a special message if warning (flag) condition
     if(flag) {
-      loginfo$flags <- loginfo$flags + 1
-      assign(LOGINFO, loginfo, envir = PKG.ENV)
+      setlogdata("flags", getlogdata("flags") + 1)
       flagmsg <- "** Flagged message: **\n"
-#       if(loginfo$sink) {
-#         message(flagmsg)
-#       }
+      #       if(loginfo$sink) {
+      #         message(flagmsg)
+      #       }
       cat(flagmsg, file = file, append = TRUE)
     }
 
@@ -139,7 +119,7 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
       if(mode(x) %in% c("numeric", "character")) {
         cat(x, " ", file = file, append = TRUE)
       } else { # more complex; let print() handle it
-        if(loginfo$sink) {
+        if(getlogdata("sink")) {
           print(x)
         } else {
           capture.output(x, file = file, append = TRUE)
@@ -169,28 +149,26 @@ flaglog <- function(...) printlog(..., flag = TRUE)
 closelog <- function(sessionInfo = TRUE) {
 
   # Make sure there's an open log file available to close
-  if(exists(LOGINFO, envir = PKG.ENV)) {
-    loginfo <- get(LOGINFO, envir = PKG.ENV)
-  } else {
-    warning("No log file to close")
-    return(FALSE)
-  }
+  flags <- getlogdata("flags")
+  if(is.null(flags)) return(FALSE)
+  logfile <- getlogdata("logfile")
 
-  flags <- loginfo$flags
-  printlog("Closing", basename(loginfo$logfile),
+  printlog("Closing", basename(logfile),
            "flags =", flags, level = Inf)
 
   # Print sessionInfo() to file
   if(sessionInfo) try({
-    sink(loginfo$logfile, append = TRUE)
+    sink(logfile, append = TRUE)
     cat("-------\n")
     print(sessionInfo())
     sink()
   })
 
-  # Remove sink, if applicable, and the log info file
-  if(loginfo$sink & sink.number()) sink()
-  try(rm(list = LOGINFO, envir = PKG.ENV), silent = TRUE)
+  # Remove sink, if applicable
+  if(getlogdata("sink") & getlogdata("sink.number")) sink()
+
+  # Remove log from our internal data structure
+  removelog()
 
   invisible(flags)
 } # closelog
