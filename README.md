@@ -1,17 +1,17 @@
-# luxlogr
+# luzlogr
 Lightweight logging utilities for R scripts. In progress.
 
 ## Installing
 To install this package:
 
 1. Make sure you have `devtools` installed from CRAN and loaded.
-2. `install_github("bpbond/luxlogr")`
+2. `install_github("bpbond/luzlogr")`
 
 Then:
 
 ```R
-library(luxlogr)
-help(package = 'luxlogr')
+library(luzlogr)
+help(package = 'luzlogr')
 ```
 
 ## Logging

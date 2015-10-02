@@ -6,5 +6,5 @@
 #'
 #' @import assertthat
 #' @docType package
-#' @name luxlogr
+#' @name luzlogr
 NULL

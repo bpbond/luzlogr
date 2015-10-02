@@ -1,4 +1,4 @@
 library(testthat)
-library(luxlogr)
+library(luzlogr)
 
-test_check("luxlogr")
+test_check("luzlogr")
