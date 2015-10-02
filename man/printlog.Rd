@@ -32,6 +32,11 @@ If the current log was opened with \code{sink} = TRUE, the default,
 messages are printed to the screen, otherwise not. \code{flaglog} assumes
 that the message is to be flagged, which \code{printlog} does not.
 }
+\note{
+Messages will only appear in the logfile if their \code{level} exceeds
+the log's \code{loglevel}; this allows you to easily change the amount of
+detail being logged.
+}
 \examples{
 logfile <- openlog("test")
 printlog("message")

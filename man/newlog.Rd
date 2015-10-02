@@ -4,7 +4,7 @@
 \alias{newlog}
 \title{Create new log}
 \usage{
-newlog(logfile, loglevel, sink)
+newlog(logfile, loglevel, sink, closeit)
 }
 \arguments{
 \item{logfile}{Name of log file}
@@ -12,6 +12,8 @@ newlog(logfile, loglevel, sink)
 \item{loglevel}{Minimum priority level (numeric, optional)}
 
 \item{sink}{Send all console output to logfile? (logical, optional)}
+
+\item{closeit}{File should be closed when log closes?}
 }
 \description{
 Create new log
