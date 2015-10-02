@@ -89,8 +89,15 @@ test_that("closelog works correctly", {
   # sessionInfo added?
   LOGFILE <- openlog("test", sink = FALSE)
   oldsize <- file.size(LOGFILE)
-  expect_true(closelog())
+  expect_is(closelog(), "numeric")
   expect_more_than(file.size(LOGFILE), oldsize)
+
+  # flag information returned?
+  LOGFILE <- openlog("test", sink = FALSE)
+  expect_equal(closelog(), 0)
+  LOGFILE <- openlog("test", sink = FALSE)
+  printlog(flag = TRUE)
+  expect_equal(closelog(), 1)
 
   # suppressing sessionInfo data
   LOGFILE <- openlog("test", sink = FALSE)
