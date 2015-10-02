@@ -53,5 +53,6 @@ Thu Oct  1 21:38:45 2015  So will this (level 0 by default)
 ** Flagged message: **
 Thu Oct  1 21:39:13 2015  Error!  
 Thu Oct  1 21:39:17 2015  Closing  test.log.txt  flags =  1  
-For more details, see the documentation.
 ```
+
+For more details, see the documentation.
