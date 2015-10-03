@@ -8,3 +8,7 @@
 #' @docType package
 #' @name luzlogr
 NULL
+
+
+DEBUG <- TRUE
+msg <- function(...) if(DEBUG) message(...)

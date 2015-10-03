@@ -34,11 +34,13 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = TRUE) {
     description <- file
     closeit <- FALSE
     if(file.exists(file) & !append) {
+      msg("Removing old ", file)
       file.remove(file)
     }
   } else if(inherits(file, "connection")) {  # connection
     closeit <- !isOpen(file)
     if(!isOpen(file)) {
+      msg("Opening connection")
       open(file, if(append) "a" else "w")
     }
     description <- summary(file)$description
@@ -136,6 +138,8 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
     }
 
     if(cr) cat("\n", file = file, append = TRUE)
+  } else {
+    msg("Message level not high enough")
   }
 
   invisible(TRUE)
