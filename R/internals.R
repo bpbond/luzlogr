@@ -5,6 +5,12 @@
 PKG.ENV <- new.env()    # environment in which to store logging info
 LOGINFO <- ".loginfo"   # name of storage variable
 
+# LOGINFO, above, is implemented as a list of lists.
+# The first-order list operates as a stack, where the last entry holds the
+# currently-active log information. Each entry, in turn, is a list of
+# information about that particular log. `newlog` pushes a new entry on to
+# the stack, while `closelog` pops the last one off.
+
 # -----------------------------------------------------------------------------
 #' Create new log
 #'
