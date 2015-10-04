@@ -47,12 +47,14 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = TRUE) {
   }
   else stop("'file' must be a character string or a connection")
 
-  # Create a new log in our internal data structure
-  newlog(logfile = file, loglevel = loglevel, sink = sink, closeit = closeit)
-
+  # Open a new sink, if requested
   if(sink) {
     sink(file, split = TRUE, append = append)
   }
+
+  # Create a new log in our internal data structure
+  newlog(logfile = file, loglevel = loglevel, sink = sink,
+         description = description, closeit = closeit)
 
   printlog("Opening", description, level = Inf)
   invisible(description)
@@ -98,20 +100,28 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
   args <- list(...)
 
   # Make sure there's an open log file available
-  loglevel <- getlogdata("loglevel")
-  if(is.null(loglevel)) return(FALSE)
+  loginfo <- getloginfo()
+  if(is.null(loginfo)) return(invisible(FALSE))
+
+  msg("Writing to ", loginfo$description)
+
+  # If someone has messaged with sink(), by opening or closing
+  # sinks, things will get screwed up. Warn in this case.
+  if(sink.number() != loginfo$sink.number) {
+    warning("Current sink number doesn't match one in log data")
+  }
 
   # Messages are only printed if their level exceeds the log's level (or an error)
-  if(level >= loglevel | flag) {
-    if(getlogdata("sink")) { # If capturing everything, output to screen
+  if(level >= loginfo$loglevel | flag) {
+    if(loginfo$sink) { # If capturing everything, output to screen
       file <- stdout()
     } else {  # otherwise, file
-      file <- getlogdata("logfile")
+      file <- loginfo$logfile
     }
 
     # Print a special message if warning (flag) condition
     if(flag) {
-      setlogdata("flags", getlogdata("flags") + 1)
+      setlogdata("flags", loginfo$flags + 1)
       flagmsg <- "** Flagged message: **\n"
       #       if(loginfo$sink) {
       #         message(flagmsg)
@@ -129,7 +139,7 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
       if(mode(x) %in% c("numeric", "character")) {
         cat(x, " ", file = file, append = TRUE)
       } else { # more complex; let print() handle it
-        if(getlogdata("sink")) {
+        if(loginfo$sink) {
           print(x)
         } else {
           capture.output(x, file = file, append = TRUE)
@@ -161,31 +171,30 @@ flaglog <- function(...) printlog(..., flag = TRUE)
 closelog <- function(sessionInfo = TRUE) {
 
   # Make sure there's an open log file available to close
-  logfile <- getlogdata("logfile")
-  if(is.null(logfile)) return(NULL)
+  loginfo <- getloginfo()
+  if(is.null(loginfo)) return(invisible(NULL))
 
-  if(is.character(logfile))
-    description <- basename(logfile)
+  if(is.character(loginfo$logfile))
+    description <- basename(loginfo$logfile)
   else
-    description <- summary(logfile)$description
+    description <- summary(loginfo$logfile)$description
 
-  flags <- getlogdata("flags")
-  printlog("Closing", description, "flags =", flags, level = Inf)
+  printlog("Closing", description, "flags =", loginfo$flags, level = Inf)
 
   # Remove sink, if applicable
-  if(getlogdata("sink") & sink.number()) sink()
+  if(loginfo$sink & sink.number()) sink()
 
   # Append sessionInfo() to file
   if(sessionInfo) {
-    cat("-------\n", file = logfile, append = TRUE)
-    capture.output(sessionInfo(), file = logfile, append = TRUE)
+    cat("-------\n", file = loginfo$logfile, append = TRUE)
+    capture.output(sessionInfo(), file = loginfo$logfile, append = TRUE)
   }
 
   # Close file or connection, if necessary
-  if(getlogdata("closeit")) close(logfile)
+  if(loginfo$closeit) close(loginfo$logfile)
 
-  # Remove log from our internal data structure
+  # Remove log from internal data structure
   removelog()
 
-  invisible(flags)
+  invisible(loginfo$flags)
 } # closelog
