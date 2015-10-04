@@ -10,5 +10,5 @@
 NULL
 
 
-DEBUG <- TRUE
+DEBUG <- FALSE
 msg <- function(...) if(DEBUG) message(...)

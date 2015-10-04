@@ -20,14 +20,12 @@ Three functions - `openlog()`, `printlog()`, `closelog()` - provide logging of s
 ```R
 openlog("test.log")
 printlog("message")
-print("This will also appear in the logfile, as sink is TRUE by default")
 closelog()
 ```
 The resulting log file `test.log` looks like this:
 ```
 Thu Sep 17 08:46:59 2015  Opening ./test.log
 Thu Sep 17 08:46:59 2015  message
-[1] "This will also appear in the logfile, as sink is TRUE by default"
 Thu Sep 17 08:46:59 2015  Closing test.log  flags = 0
 -------
 R version 3.2.0 (2015-04-16)
@@ -35,11 +33,12 @@ Platform: x86_64-apple-darwin13.4.0 (64-bit)
 Running under: OS X 10.10.5 (Yosemite)
 ```
 
-The following code snippets demonstrate two additional features: log and message levels, and flagged messages.
+The following code snippets demonstrate three additional features: log and message levels, capturing all script output, and flagged messages.
 
 ```R
-openlog("test.log", loglevel = 0)
+openlog("test.log", loglevel = 0, sink = TRUE)
 printlog("This message will appear", level = 0)
+print("This will also appear in the logfile, as sink is TRUE")
 printlog("So will this (level 0 by default)")
 printlog("This will not", level = -1)
 printlog("Error!", flag = TRUE)
@@ -51,6 +50,7 @@ results in:
 ```
 Thu Oct  1 21:38:01 2015  Opening  ./test.log  
 Thu Oct  1 21:38:34 2015  This message will appear  
+[1] "This will also appear in the logfile, as sink is TRUE"
 Thu Oct  1 21:38:45 2015  So will this (level 0 by default)  
 ** Flagged message: **
 Thu Oct  1 21:39:13 2015  Error!  

@@ -50,12 +50,12 @@ test_that("openlog handles special cases", {
   file.remove(LOGFILE)
 
   # Detect sink mismatch correctly
-  capture.output({
-    LOGFILE <- openlog("test", sink = TRUE)
-    sink()
-    expect_message(printlog("hi"))
-    expect_message(closelog())
-  })
+#  capture.output({
+#     LOGFILE <- openlog("test", sink = TRUE)
+#     sink()
+#     printlog("hi")
+#     expect_warning(closelog())
+#  })
   file.remove(LOGFILE)
 })
 

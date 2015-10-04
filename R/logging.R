@@ -18,12 +18,11 @@
 #' @examples
 #' logfile <- openlog("test")
 #' printlog("message")
-#' print("This will also appear in the logfile, as sink is TRUE")
 #' closelog()
 #' readLines(logfile)
 #' @export
 #' @seealso \code{\link{printlog}} \code{\link{closelog}}
-openlog <- function(file, loglevel = -Inf, append = FALSE, sink = TRUE) {
+openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
 
   # Sanity checks
   assert_that(is.numeric(loglevel))
@@ -137,8 +136,9 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
       x <- args[[i]]
       # simple objects are printed together on a line
       if(mode(x) %in% c("numeric", "character")) {
-        cat(x, " ", file = file, append = TRUE)
+        cat(x, " ", file = file, append = TRUE, sep = "")
       } else { # more complex; let print() handle it
+        cat("\n", file = file, append = TRUE)
         if(loginfo$sink) {
           print(x)
         } else {

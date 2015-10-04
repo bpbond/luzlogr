@@ -4,7 +4,7 @@
 \alias{openlog}
 \title{Open a new logfile}
 \usage{
-openlog(file, loglevel = -Inf, append = FALSE, sink = TRUE)
+openlog(file, loglevel = -Inf, append = FALSE, sink = FALSE)
 }
 \arguments{
 \item{file}{Name of logfile (character or writeable \code{\link{connection}})}
@@ -35,7 +35,6 @@ detail being logged.
 \examples{
 logfile <- openlog("test")
 printlog("message")
-print("This will also appear in the logfile, as sink is TRUE")
 closelog()
 readLines(logfile)
 }
