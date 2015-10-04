@@ -16,7 +16,7 @@ help(package = 'luzlogr')
 
 ## Logging
 
-Three functions - `openlog()`, `printlog()`, `closelog()` - provide logging of script output. They are lightweight but provide features including priority levels for logs and messages; capturing all output (via `sink`); and logging to a text file or arbitrary [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html). For example:
+Three functions - `openlog()`, `printlog()`, `closelog()` - provide logging of script output. They provide features including priority levels for logs and messages; optionally capturing all output (via `sink`); switching between logs; and logging to a text file or arbitrary [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html). For example:
 ```R
 openlog("test.log")
 printlog("message")
