@@ -1,0 +1,70 @@
+---
+title: "Introduction to luzlogr"
+author: "Ben Bond-Lamberty"
+date: "October 4, 2015"
+output: html_document
+---
+
+This vignette describes how to use the **luzlogr** package, which provides flexible but lightweight logging facilities for R scripts.
+
+## Installing
+To install this package:
+
+1. Make sure you have `devtools` installed from CRAN and loaded.
+2. `install_github("bpbond/luzlogr")`
+
+## Basics
+Three functions - `openlog()`, `printlog()`, `closelog()` - provide logging of script output. They're simple to use:
+
+```{r}
+library(luzlogr)
+openlog("test.log")
+printlog("message")
+closelog()
+```
+
+The resulting log file `test.log` looks like this (not including the initial `##` characters):
+```{r, echo=FALSE}
+lg <- readLines("test.log")
+invisible(file.remove("test.log"))
+for(i in seq_along(lg)) cat(lg[i], "\n")
+```
+
+Any printable object can be written to a log. For example:
+
+```{r}
+openlog("test.log")
+printlog("message", 1, 2)
+printlog(head(cars))
+closelog(sessionInfo = FALSE)
+```
+
+(Notice we've told `closelog()` not to append `sessionInfo()` output, as it does by default.)
+
+```{r, echo=FALSE}
+lg <- readLines("test.log")
+invisible(file.remove("test.log"))
+for(i in seq_along(lg)) cat(lg[i], "\n")
+```
+
+## More involved examples
+
+By design, `luzlogr` is intended to be flexible and easy to use. Nonetheless, it does provide additional features, including:
+
+* priority levels for logs and messages
+* capturing *all* script output
+* logging to a text file or arbitrary [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html)
+
+### Priority levels
+
+Need - solution - example
+
+### Capturing all output
+
+Need - solution - example
+
+### Logging to a connection
+
+Need - solution - example
+
+This concludes the **Introduction** vignette.
