@@ -6,6 +6,9 @@
 \usage{
 removelog()
 }
+\value{
+The just-removed log info
+}
 \description{
 Remove current log
 }

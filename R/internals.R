@@ -99,7 +99,7 @@ getloginfo <- function() {
 # -----------------------------------------------------------------------------
 #' Set log data
 #'
-#' @param logdata Name of datum to set
+#' @param logdata Name of datum to set (character)
 #' @param value Value
 #' @details This handles internal data tracking only, not the file on disk.
 #' @keywords internal

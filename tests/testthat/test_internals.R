@@ -30,6 +30,8 @@ test_that("newlog and nlogs work correctly", {
 
   # Make sure information stored correctly
   loginfo <- getloginfo()
+  expect_is(loginfo, "list")
+
   expect_equal(logfile, loginfo$logfile)
   expect_equal(loglevel, loginfo$loglevel)
   expect_equal(sink, loginfo$sink)
@@ -37,6 +39,7 @@ test_that("newlog and nlogs work correctly", {
   expect_equal(closeit, loginfo$closeit)
 
   removelog()
+  expect_warning(getloginfo())
 })
 
 test_that("removelog works correctly", {
@@ -56,6 +59,8 @@ test_that("removelog works correctly", {
 
   # Make sure information removed correctly
   loginfo <- removelog()
+  expect_is(loginfo, "list")
+
   expect_equal(logfile, loginfo$logfile)
   expect_equal(loglevel, loginfo$loglevel)
   expect_equal(sink, loginfo$sink)
@@ -66,7 +71,6 @@ test_that("removelog works correctly", {
 })
 
 test_that("setlogdata works correctly", {
-
   logfile <- "logfile"
   loglevel <- 0
   sink <- TRUE
@@ -83,5 +87,7 @@ test_that("setlogdata works correctly", {
   expect_error(setlogdata("description", "newdescription"))
   expect_null(setlogdata("flags", 1))
 
-  removelog()
+  # Make sure information changed correctly
+  loginfo <-   removelog()
+  expect_equal(loginfo$flags, 1)
 })

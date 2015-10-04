@@ -48,6 +48,15 @@ test_that("openlog handles special cases", {
   expect_true(isOpen(test))  # now closed and unavailable
   expect_true(file.exists(LOGFILE))
   file.remove(LOGFILE)
+
+  # Detect sink mismatch correctly
+  capture.output({
+    LOGFILE <- openlog("test", sink = TRUE)
+    sink()
+    expect_message(printlog("hi"))
+    expect_message(closelog())
+  })
+  file.remove(LOGFILE)
 })
 
 test_that("Basic logging works correctly", {
@@ -93,7 +102,6 @@ test_that("logging sinks correctly", {
 })
 
 test_that("closelog works correctly", {
-
   # sessionInfo added?
   LOGFILE <- openlog("test", sink = FALSE)
   oldsize <- file.size(LOGFILE)
@@ -111,8 +119,7 @@ test_that("closelog works correctly", {
   LOGFILE <- openlog("test", sink = FALSE)
   closelog()
   oldsize <- file.size(LOGFILE)
-
-  openlog("test", sink = FALSE)
+  LOGFILE <- openlog("test", sink = FALSE)
   closelog(sessionInfo = FALSE)
   expect_less_than(file.size(LOGFILE), oldsize)
 
