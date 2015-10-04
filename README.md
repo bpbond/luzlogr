@@ -1,5 +1,5 @@
 # luzlogr
-Lightweight logging utilities for R scripts. In progress. (The big current TODO is multiple concurrent logs, implemented as a stack, so that you can log to A, call a subroutine that logs to B, and then go right back to A.)
+Lightweight logging utilities for R scripts.
 
 ## Installing
 To install this package:
