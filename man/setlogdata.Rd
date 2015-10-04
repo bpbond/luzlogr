@@ -9,7 +9,7 @@ setlogdata(datum, value)
 \arguments{
 \item{value}{Value}
 
-\item{logdata}{Name of datum to set}
+\item{logdata}{Name of datum to set (character)}
 }
 \description{
 Set log data
