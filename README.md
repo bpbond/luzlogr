@@ -33,28 +33,4 @@ Platform: x86_64-apple-darwin13.4.0 (64-bit)
 Running under: OS X 10.10.5 (Yosemite)
 ```
 
-The following code snippets demonstrate three additional features: log and message levels, capturing all script output, and flagged messages.
-
-```R
-openlog("test.log", loglevel = 0, sink = TRUE)
-printlog("This message will appear", level = 0)
-print("This will also appear in the logfile, as sink is TRUE")
-printlog("So will this (level 0 by default)")
-printlog("This will not", level = -1)
-printlog("Error!", flag = TRUE)
-closelog(sessionInfo = FALSE)
-```
-
-results in:
-
-```
-Thu Oct  1 21:38:01 2015  Opening  ./test.log  
-Thu Oct  1 21:38:34 2015  This message will appear  
-[1] "This will also appear in the logfile, as sink is TRUE"
-Thu Oct  1 21:38:45 2015  So will this (level 0 by default)  
-** Flagged message: **
-Thu Oct  1 21:39:13 2015  Error!  
-Thu Oct  1 21:39:17 2015  Closing test.log  flags =  1  
-```
-
-For more details, see the documentation.
+For more details, see the vignette and documentation.
