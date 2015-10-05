@@ -152,7 +152,7 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
         if(loginfo$sink) {
           print(x)
         } else {
-          capture.output(x, file = file, append = TRUE)
+          utils::capture.output(x, file = file, append = TRUE)
         }
       }
     }
@@ -211,7 +211,7 @@ closelog <- function(sessionInfo = TRUE) {
   # Append sessionInfo() to file
   if(sessionInfo) {
     cat("-------\n", file = loginfo$logfile, append = TRUE)
-    capture.output(sessionInfo(), file = loginfo$logfile, append = TRUE)
+    utils::capture.output(sessionInfo(), file = loginfo$logfile, append = TRUE)
   }
 
   # Close file or connection, if necessary

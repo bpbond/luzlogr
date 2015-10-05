@@ -88,7 +88,7 @@ test_that("Basic logging works correctly", {
 })
 
 test_that("logging sinks correctly", {
-  capture.output({
+  utils::capture.output({
     sn <- sink.number()
     LOGFILE <- openlog("test", sink = TRUE)
     expect_equal(sink.number(), sn + 1)
