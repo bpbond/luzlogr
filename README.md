@@ -1,6 +1,8 @@
 # luzlogr
 Lightweight logging utilities for R scripts.
 
+[![Travis-CI Build Status](https://travis-ci.org/bpbond/luzlogr.svg?branch=master)](https://travis-ci.org/bpbond/luzlogr)
+
 ## Installing
 To install this package:
 
