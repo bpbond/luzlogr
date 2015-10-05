@@ -30,7 +30,7 @@ invisible(file.remove("test.log"))
 for(i in seq_along(lg)) cat(lg[i], "\n")
 ```
 
-By default individual lines are prefixed with a timestamp, and end with a carriage return, and the entire log has starts with an open message and ends with a close one.
+By default individual lines are prefixed with a timestamp, and end with a carriage return, and the entire log starts with an open message and ends with a close one.
 
 Any printable object can be written to a log. For example:
 
