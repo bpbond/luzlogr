@@ -1,5 +1,5 @@
 # luzlogr
-Lightweight logging utilities for R scripts.
+Lightweight logging for R scripts.
 
 [![Travis-CI Build Status](https://travis-ci.org/bpbond/luzlogr.svg?branch=master)](https://travis-ci.org/bpbond/luzlogr)
 
