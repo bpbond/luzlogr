@@ -6,8 +6,8 @@
 \alias{luzlogr-package}
 \title{Lightweight logging for R}
 \description{
-Logging facilities for R scripts. Very lightweight, but supports message
-prioritization, echoing to screen (or not), timestamps, multiple open
-logs, etc.
+This package provides flexible but lightweight logging facilities for R scripts.
+Supports priority levels for logs and messages, flagging messages,
+capturing script output, switching logs, and logging to files or connections.
 }
 

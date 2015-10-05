@@ -7,7 +7,7 @@
 #' @param loglevel Minimum priority level (numeric, optional)
 #' @param append Append to logfile? (logical, optional)
 #' @param sink Send all console output to logfile? (logical, optional)
-#' @return Invisible fully-qualified name of log file
+#' @return Invisible fully-qualified name of log file.
 #' @details Open a new logfile. If \code{sink} is TRUE (the default), all
 #' screen output will be captured (via \code{\link{sink}}).
 #' Re-opening a logfile will erase the previous output unless \code{append}
@@ -67,7 +67,7 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
 #' @param ts Print preceding timestamp? (logical, optional)
 #' @param cr Print trailing newline? (logical, optional)
 #' @param flag Flag this message (e.g. error or warning) (logical, optional)
-#' @return Invisible success (TRUE) or failure (FALSE)
+#' @return Invisible success (TRUE) or failure (FALSE).
 #' @details Logs a message, which consists of zero or more printable objects.
 #' If the current log was opened with \code{sink} = TRUE, the default,
 #' messages are printed to the screen, otherwise not. \code{flaglog} assumes
@@ -164,7 +164,7 @@ flaglog <- function(...) printlog(..., flag = TRUE)
 #' Close current logfile
 #'
 #' @param sessionInfo Print \code{\link{sessionInfo}} output? (logical, optional)
-#' @return Number of flagged messages (numeric)
+#' @return Number of flagged messages (numeric).
 #' @details Close current logfile
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{printlog}}

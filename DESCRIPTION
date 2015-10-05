@@ -5,7 +5,7 @@ Version: 0.1
 Date: 2015-09-29
 Authors@R: person("Ben", "Bond-Lamberty", email = "bondlamberty@pnnl.gov", role = c("aut", "cre"))
 Maintainer: Ben Bond-Lamberty <bondlamberty@pnnl.gov>
-Description: Lightweight R logging.
+Description: This package provides flexible but lightweight logging facilities for R scripts. Supports priority levels for logs and messages, flagging messages, capturing script output, switching logs, and logging to files or connections.
 Imports:
     assertthat (>= 0.1)
 Depends:

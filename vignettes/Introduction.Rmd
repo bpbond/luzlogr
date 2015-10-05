@@ -8,9 +8,9 @@ output: html_document
 This vignette describes how to use the **luzlogr** package, which provides flexible but lightweight logging facilities for R scripts.
 
 ## Installing
-To install this package:
+To install this package, use R's `install.packages()` function, or the "Packages" pane in [RStudio](https://www.rstudio.com/products/RStudio/). To install the latest version of this package from GitHub:
 
-1. Make sure you have `devtools` installed from CRAN and loaded.
+1. Make sure you have the `devtools` package installed from CRAN and loaded.
 2. `install_github("bpbond/luzlogr")`
 
 ## Basics
@@ -29,6 +29,8 @@ lg <- readLines("test.log")
 invisible(file.remove("test.log"))
 for(i in seq_along(lg)) cat(lg[i], "\n")
 ```
+
+By default individual lines are prefixed with a timestamp, and end with a carriage return, and the entire log has starts with an open message and ends with a close one.
 
 Any printable object can be written to a log. For example:
 
@@ -49,22 +51,82 @@ for(i in seq_along(lg)) cat(lg[i], "\n")
 
 ## More involved examples
 
-By design, `luzlogr` is intended to be flexible and easy to use. Nonetheless, it does provide additional features, including:
+By design, `luzlogr` is intended to be simple and easy to use. Nonetheless, it does provide additional features, including:
 
 * priority levels for logs and messages
+* flagging messages
 * capturing *all* script output
 * logging to a text file or arbitrary [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html)
+* switching logs
 
 ### Priority levels
 
-Need - solution - example
+In many circumstances, we want messages to have different priorities or *levels* associated with them. If the logfile itself has a minimum priority level, set when it's opened, this makes it easy to produce logs of varying levels of detail.
+
+By default, **luzlogr** logs have a minimum levels of `-Inf`: in other words, they'll accept every single message sent to them via `printlog()`, which produces messages with a default level of zero. We can change the log's level, however, and this will then affect which messages appear in the log.
+
+```{r}
+openlog("test.log", loglevel = 0)
+printlog("This message will appear", level = 0)
+printlog("So will this (level 0 by default)")
+printlog("This will not", level = -1)
+closelog(sessionInfo = FALSE)
+```
+
+produces
+
+```{r, echo=FALSE}
+lg <- readLines("test.log")
+invisible(file.remove("test.log"))
+for(i in seq_along(lg)) cat(lg[i], "\n")
+```
+
+Notice that the third message didn't get logged. If we change the `loglevel` parameter in `openlog()` to -1 or lower, however, all these messages will appear.
+
+### Flagging messages
+
+Another way to differentiate messages is by *flagging* them. Note that in all the above examples, when the log is closed, a `flags = 0` message is printed. But we can change that:
+
+```{r}
+openlog("test.log")
+printlog("A normal message")
+printlog("A flagged message!", flag = TRUE)
+flaglog("Another")
+closelog(sessionInfo = FALSE)
+```
+
+```{r, echo=FALSE}
+lg <- readLines("test.log")
+invisible(file.remove("test.log"))
+for(i in seq_along(lg)) cat(lg[i], "\n")
+```
 
 ### Capturing all output
 
-Need - solution - example
+So far, only messages sent via `printlog()` appear in the log. We might, however, want to capture *everything*^[Almost. Messages, warnings, and errors will not appear.] produced by a script. To do this, use the `sink = TRUE` option of `openlog()`.
 
 ### Logging to a connection
 
-Need - solution - example
+Logs can also be sent to any R [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html): a pipe, compressed file, URL, etc.
+
+```{r}
+con <- gzfile("test.log.gz")
+openlog(con)
+printlog("Sending to a compressed logfile")
+closelog(sessionInfo = FALSE)
+```
+
+```{r, echo=FALSE}
+invisible(file.remove("test.log.gz"))
+```
+
+Note that **luzlogr** won't close a connection that was already open at the time of the `openlog()` call.
+
+### Switching logs
+
+If you're logging to log A and open log B (without closing A), subsequent `printlog()` messages will go to B. When you close B, logging switches back to A (i.e., there's a stack of logs that gets pushed/popped when necessary).
+
+If you need to append to an existing log, use `append = TRUE` when calling `openlog()`. By default, existing logfiles are erased upon opening.
+
 
 This concludes the **Introduction** vignette.

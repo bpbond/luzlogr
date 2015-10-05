@@ -55,7 +55,7 @@ newlog <- function(logfile, loglevel, sink, description, closeit) {
 # -----------------------------------------------------------------------------
 #' Remove current log
 #'
-#' @return The just-removed log info
+#' @return The just-removed log info.
 #' @details This handles internal data tracking only, not the file on disk.
 #' @keywords internal
 removelog <- function() {
@@ -79,7 +79,7 @@ removelog <- function() {
 # -----------------------------------------------------------------------------
 #' Get current log info
 #'
-#' @return A list with information about current (active) log
+#' @return A list with information about current (active) log.
 #' @details This handles internal data tracking only, not the file on disk.
 #' @keywords internal
 getloginfo <- function() {
@@ -134,7 +134,7 @@ setlogdata <- function(datum, value) {
 # -----------------------------------------------------------------------------
 #' Return number of current logs
 #'
-#' @return Number of current logs (numeric)
+#' @return Number of current logs (numeric).
 #' @keywords internal
 nlogs <- function() {
   if(exists(LOGINFO, envir = PKG.ENV)) {
