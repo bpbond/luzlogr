@@ -14,4 +14,4 @@ New submission
 
 
 ## Downstream dependencies
-None.
+There are currently no downstream dependencies for this package.
