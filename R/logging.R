@@ -1,4 +1,4 @@
-# Logging functions
+# luzlogr - user-visible logging functions
 
 # -----------------------------------------------------------------------------
 #' Open a new logfile
@@ -8,15 +8,17 @@
 #' @param append Append to logfile? (logical, optional)
 #' @param sink Send all console output to logfile? (logical, optional)
 #' @return Invisible fully-qualified name of log file.
-#' @details Open a new logfile. If \code{sink} is TRUE (the default), all
-#' screen output will be captured (via \code{\link{sink}}).
+#' @details Open a new logfile. Messages will only appear in the logfile
+#' if their \code{level} exceeds the log's \code{loglevel};
+#' this allows you to easily change the amount of detail being logged.
+#'
 #' Re-opening a logfile will erase the previous output unless \code{append}
-#' is TRUE.
-#' @note Messages will only appear in the logfile if their \code{level} exceeds
-#' the log's \code{loglevel}; this allows you to easily change the amount of
-#' detail being logged.
+#' is TRUE. Opening a new logfile when one is already open will temporarily
+#' switch logging to that new file.
+#'
+#' If \code{sink} is TRUE, all screen output will be captured (via \code{\link{sink}}).
 #' @examples
-#' logfile <- openlog("test")
+#' logfile <- openlog("test.log")
 #' printlog("message")
 #' closelog()
 #' readLines(logfile)
@@ -69,23 +71,31 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
 #' @param flag Flag this message (e.g. error or warning) (logical, optional)
 #' @return Invisible success (TRUE) or failure (FALSE).
 #' @details Logs a message, which consists of zero or more printable objects.
-#' If the current log was opened with \code{sink} = TRUE, the default,
-#' messages are printed to the screen, otherwise not. \code{flaglog} assumes
-#' that the message is to be flagged, which \code{printlog} does not.
-#' @note Messages will only appear in the logfile if their \code{level} exceeds
+#' Simple objects (numeric and character) are printed together on a single
+#' line, whereas complex objects (data frames, etc) start on a new line by
+#' themselves.
+#'
+#' If the current log was opened with \code{sink} = TRUE,
+#' messages are printed to the screen, otherwise not. Messages can be flagged;
+#' \code{flaglog} assumes
+#' that the message is to be flagged, whereas \code{printlog} does not.
+#'
+#' Messages will only appear in the logfile if their \code{level} exceeds
 #' the log's \code{loglevel}; this allows you to easily change the amount of
 #' detail being logged.
+#' @note A message's preceding timestamp and following carriage return can be
+#' suppressed using the \code{ts} and \code{cr} parameters.
 #' @examples
-#' logfile <- openlog("test")
+#' logfile <- openlog("test.log")
 #' printlog("message")
-#' printlog(1, "plus", 1, "equals", 3)
+#' printlog(1, "plus", 1, "equals", 1 + 1)
 #' closelog()
 #' readLines(logfile)
 #'
 #' logfile <- openlog("test", loglevel = 1)
 #' printlog("This message will not appear", level = 0)
 #' printlog("This message will appear", level = 1)
-#' closelog(sessionInfo = FALSE)
+#' closelog()
 #' readLines(logfile)
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{closelog}}
@@ -163,9 +173,23 @@ flaglog <- function(...) printlog(..., flag = TRUE)
 # -----------------------------------------------------------------------------
 #' Close current logfile
 #'
-#' @param sessionInfo Print \code{\link{sessionInfo}} output? (logical, optional)
+#' @param sessionInfo Append \code{\link{sessionInfo}} output? (logical, optional)
 #' @return Number of flagged messages (numeric).
-#' @details Close current logfile
+#' @details Close current logfile. The number of flagged messages is returned,
+#' invisibly.
+#'
+#' Logs are stored on a stack, and so when one is closed, logging
+#' output returns to the previous log (if any).
+#' @note If the log was being written to a \code{\link{connection}},
+#' \code{closelog} will return the connection to its pre-logging state,
+#' whether open or closed.
+#' @examples
+#' logfile <- openlog("A.log")
+#' printlog("message to A", flag = TRUE)
+#' logfile <- openlog("B.log")
+#' printlog("message to B")
+#' flagcountB <- closelog()
+#' flagcountA <- closelog(sessionInfo = FALSE)
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{printlog}}
 closelog <- function(sessionInfo = TRUE) {

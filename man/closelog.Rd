@@ -7,16 +7,33 @@
 closelog(sessionInfo = TRUE)
 }
 \arguments{
-\item{sessionInfo}{Print \code{\link{sessionInfo}} output? (logical, optional)}
+\item{sessionInfo}{Append \code{\link{sessionInfo}} output? (logical, optional)}
 }
 \value{
-Number of flagged messages (numeric)
+Number of flagged messages (numeric).
 }
 \description{
 Close current logfile
 }
 \details{
-Close current logfile
+Close current logfile. The number of flagged messages is returned,
+invisibly.
+
+Logs are stored on a stack, and so when one is closed, logging
+output returns to the previous log (if any).
+}
+\note{
+If the log was being written to a \code{\link{connection}},
+\code{closelog} will return the connection to its pre-logging state,
+whether open or closed.
+}
+\examples{
+logfile <- openlog("A.log")
+printlog("message to A", flag = TRUE)
+logfile <- openlog("B.log")
+printlog("message to B")
+flagcountB <- closelog()
+flagcountA <- closelog(sessionInfo = FALSE)
 }
 \seealso{
 \code{\link{openlog}} \code{\link{printlog}}

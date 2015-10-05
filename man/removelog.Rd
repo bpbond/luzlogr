@@ -7,7 +7,7 @@
 removelog()
 }
 \value{
-The just-removed log info
+The just-removed log info.
 }
 \description{
 Remove current log

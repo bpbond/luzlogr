@@ -1,4 +1,4 @@
-# loginfo - backend support functions
+# luzlogr - backend support functions
 #
 # Keep a clean separation between implementation of loginfo data and use
 
@@ -83,7 +83,6 @@ removelog <- function() {
 #' @details This handles internal data tracking only, not the file on disk.
 #' @keywords internal
 getloginfo <- function() {
-
   # Get the current log data
   if(exists(LOGINFO, envir = PKG.ENV)) {
     loginfo <- get(LOGINFO, envir = PKG.ENV)
@@ -142,4 +141,3 @@ nlogs <- function() {
   } else
     0
 } # nlogs
-

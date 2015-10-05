@@ -16,24 +16,24 @@ openlog(file, loglevel = -Inf, append = FALSE, sink = FALSE)
 \item{sink}{Send all console output to logfile? (logical, optional)}
 }
 \value{
-Invisible fully-qualified name of log file
+Invisible fully-qualified name of log file.
 }
 \description{
 Open a new logfile
 }
 \details{
-Open a new logfile. If \code{sink} is TRUE (the default), all
-screen output will be captured (via \code{\link{sink}}).
+Open a new logfile. Messages will only appear in the logfile
+if their \code{level} exceeds the log's \code{loglevel};
+this allows you to easily change the amount of detail being logged.
+
 Re-opening a logfile will erase the previous output unless \code{append}
-is TRUE.
-}
-\note{
-Messages will only appear in the logfile if their \code{level} exceeds
-the log's \code{loglevel}; this allows you to easily change the amount of
-detail being logged.
+is TRUE. Opening a new logfile when one is already open will temporarily
+switch logging to that new file.
+
+If \code{sink} is TRUE, all screen output will be captured (via \code{\link{sink}}).
 }
 \examples{
-logfile <- openlog("test")
+logfile <- openlog("test.log")
 printlog("message")
 closelog()
 readLines(logfile)

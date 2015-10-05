@@ -7,7 +7,7 @@
 nlogs()
 }
 \value{
-Number of current logs (numeric)
+Number of current logs (numeric).
 }
 \description{
 Return number of current logs

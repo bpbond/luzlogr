@@ -7,7 +7,7 @@
 getloginfo()
 }
 \value{
-A list with information about current (active) log
+A list with information about current (active) log.
 }
 \description{
 Get current log info

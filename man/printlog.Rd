@@ -21,33 +21,41 @@ flaglog(...)
 \item{flag}{Flag this message (e.g. error or warning) (logical, optional)}
 }
 \value{
-Invisible success (TRUE) or failure (FALSE)
+Invisible success (TRUE) or failure (FALSE).
 }
 \description{
 Log a message
 }
 \details{
 Logs a message, which consists of zero or more printable objects.
-If the current log was opened with \code{sink} = TRUE, the default,
-messages are printed to the screen, otherwise not. \code{flaglog} assumes
-that the message is to be flagged, which \code{printlog} does not.
-}
-\note{
+Simple objects (numeric and character) are printed together on a single
+line, whereas complex objects (data frames, etc) start on a new line by
+themselves.
+
+If the current log was opened with \code{sink} = TRUE,
+messages are printed to the screen, otherwise not. Messages can be flagged;
+\code{flaglog} assumes
+that the message is to be flagged, whereas \code{printlog} does not.
+
 Messages will only appear in the logfile if their \code{level} exceeds
 the log's \code{loglevel}; this allows you to easily change the amount of
 detail being logged.
 }
+\note{
+A message's preceding timestamp and following carriage return can be
+suppressed using the \code{ts} and \code{cr} parameters.
+}
 \examples{
-logfile <- openlog("test")
+logfile <- openlog("test.log")
 printlog("message")
-printlog(1, "plus", 1, "equals", 3)
+printlog(1, "plus", 1, "equals", 1 + 1)
 closelog()
 readLines(logfile)
 
 logfile <- openlog("test", loglevel = 1)
 printlog("This message will not appear", level = 0)
 printlog("This message will appear", level = 1)
-closelog(sessionInfo = FALSE)
+closelog()
 readLines(logfile)
 }
 \seealso{
