@@ -1,3 +1,9 @@
+# Project files
 .Rproj.user
 .Rhistory
 .RData
+
+# Vignette files
+inst/doc
+vignettes/Introduction.R
+vignettes/Introduction.html

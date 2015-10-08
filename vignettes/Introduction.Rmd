@@ -1,8 +1,12 @@
 ---
-title: "Introduction to luzlogr"
+title: "Introduction"
 author: "Ben Bond-Lamberty"
-date: "October 4, 2015"
-output: html_document
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 This vignette describes how to use the **luzlogr** package, which provides flexible but lightweight logging facilities for R scripts.
@@ -130,3 +134,4 @@ If you need to append to an existing log, use `append = TRUE` when calling `open
 
 
 This concludes the **Introduction** vignette.
+
