@@ -21,7 +21,7 @@ test_that("functions handle bad input", {
 
 test_that("openlog handles special cases", {
   # this test errors on CRAN's r-oldrel-windows-ix86+x86_64
-  if(.Platform$OS.type != "unix") skip()
+  if(.Platform$OS.type != "unix") skip("not on unix")
 
   LOGFILE <- openlog("test", sink = FALSE)
   closelog()
@@ -64,7 +64,7 @@ test_that("openlog handles special cases", {
 
 test_that("Basic logging works correctly", {
   # this test errors on CRAN's r-oldrel-windows-ix86+x86_64
-  if(.Platform$OS.type != "unix") skip()
+  if(.Platform$OS.type != "unix") skip("not on unix")
 
   # opens correctly?
   LOGFILE <- openlog("test", sink = FALSE)
@@ -109,7 +109,7 @@ test_that("logging sinks correctly", {
 
 test_that("closelog works correctly", {
   # this test errors on CRAN's r-oldrel-windows-ix86+x86_64
-  if(.Platform$OS.type != "unix") skip()
+  if(.Platform$OS.type != "unix") skip("not on unix")
 
   # sessionInfo added?
   LOGFILE <- openlog("test", sink = FALSE)
@@ -137,7 +137,7 @@ test_that("closelog works correctly", {
 
 test_that("Priority levels work correctly", {
   # this test errors on CRAN's r-oldrel-windows-ix86+x86_64
-  if(.Platform$OS.type != "unix") skip()
+  if(.Platform$OS.type != "unix") skip("not on unix")
 
   LOGFILE <- openlog("test", loglevel = 0, sink = FALSE)
 
