@@ -24,7 +24,7 @@ openlog("test.log")
 printlog("message")
 closelog()
 ```
-The resulting log file `test.log` looks like this:
+The resulting log file `test.log` looks something like this:
 ```
 Thu Sep 17 08:46:59 2015  Opening ./test.log
 Thu Sep 17 08:46:59 2015  message

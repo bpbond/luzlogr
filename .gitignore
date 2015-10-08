@@ -5,5 +5,5 @@
 
 # Vignette files
 inst/doc
-vignettes/Introduction.R
-vignettes/Introduction.html
+vignettes/intro-luzlogr.html
+vignettes/intro-luzlogr.R

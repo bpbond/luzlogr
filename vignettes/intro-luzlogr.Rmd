@@ -1,10 +1,10 @@
 ---
-title: "Introduction"
+title: "Introduction to luzlogr"
 author: "Ben Bond-Lamberty"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction}
+  %\VignetteIndexEntry{intro-luzlogr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,7 +12,7 @@ vignette: >
 This vignette describes how to use the **luzlogr** package, which provides flexible but lightweight logging facilities for R scripts.
 
 ## Installing
-To install this package, use R's `install.packages()` function, or the "Packages" pane in [RStudio](https://www.rstudio.com/products/RStudio/). To install the latest version of this package from GitHub:
+To install this package, use R's `install.packages()` function, or the "Packages" pane in [RStudio](https://www.rstudio.com/products/RStudio/). To install the latest, developmental version of this package from GitHub:
 
 1. Make sure you have the `devtools` package installed from CRAN and loaded.
 2. `install_github("bpbond/luzlogr")`
@@ -34,7 +34,7 @@ invisible(file.remove("test.log"))
 for(i in seq_along(lg)) cat(lg[i], "\n")
 ```
 
-By default individual lines are prefixed with a timestamp, and end with a carriage return, and the entire log starts with an open message and ends with a close one.
+By default individual lines are prefixed with a timestamp, end with a carriage return, and the entire log starts with an open message and ends with a close one.
 
 Any printable object can be written to a log. For example:
 
@@ -45,7 +45,7 @@ printlog(head(cars))
 closelog(sessionInfo = FALSE)
 ```
 
-(Notice we've told `closelog()` not to append `sessionInfo()` output, as it does by default.)
+(Notice in this case we've told `closelog()` not to append `sessionInfo()` output, as it does by default.)
 
 ```{r, echo=FALSE}
 lg <- readLines("test.log")
@@ -59,13 +59,13 @@ By design, `luzlogr` is intended to be simple and easy to use. Nonetheless, it d
 
 * priority levels for logs and messages
 * flagging messages
-* capturing *all* script output
+* capturing all script output
 * logging to a text file or arbitrary [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html)
 * switching logs
 
 ### Priority levels
 
-In many circumstances, we want messages to have different priorities or *levels* associated with them. If the logfile itself has a minimum priority level, set when it's opened, this makes it easy to produce logs of varying levels of detail.
+In many circumstances, we want messages to have different priorities or *levels* associated with them. Each logfiles has a minimum priority level, set when it's opened, making it easy to produce logs with varying levels of detail--for example, under development versus release conditions.
 
 By default, **luzlogr** logs have a minimum levels of `-Inf`: in other words, they'll accept every single message sent to them via `printlog()`, which produces messages with a default level of zero. We can change the log's level, however, and this will then affect which messages appear in the log.
 
@@ -107,7 +107,7 @@ for(i in seq_along(lg)) cat(lg[i], "\n")
 
 ### Capturing all output
 
-So far, only messages sent via `printlog()` appear in the log. We might, however, want to capture *everything*^[Almost. Messages, warnings, and errors will not appear.] produced by a script. To do this, use the `sink = TRUE` option of `openlog()`.
+So far, only messages sent via `printlog()` appear in the log. We might, however, want to capture *everything*^[Almost. Messages, warnings, and errors will not appear; but see `?sink` and its `type = "message"` parameter.] produced by a script. To do this, use the `sink = TRUE` option of `openlog()`.
 
 ### Logging to a connection
 
@@ -133,5 +133,5 @@ If you're logging to log A and open log B (without closing A), subsequent `print
 If you need to append to an existing log, use `append = TRUE` when calling `openlog()`. By default, existing logfiles are erased upon opening.
 
 
-This concludes the **Introduction** vignette.
+This concludes the **Introduction to luzlogr** vignette.
 
