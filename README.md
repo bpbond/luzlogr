@@ -3,7 +3,7 @@ Lightweight logging for R scripts.
 
 [![Travis-CI Build Status](https://travis-ci.org/bpbond/luzlogr.svg?branch=master)](https://travis-ci.org/bpbond/luzlogr)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/luzlogr)](http://cran.r-project.org/web/packages/luzlogr)
-[![CRAN_Downloads_Badge](http://cranlogs.r-pkg.org/badges/Rcpp)
+![CRAN_Downloads_Badge](http://cranlogs.r-pkg.org/badges/Rcpp)
 
 ## Installing
 
