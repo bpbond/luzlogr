@@ -66,6 +66,7 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
 #' @param ts Print preceding timestamp? (logical, optional)
 #' @param cr Print trailing newline? (logical, optional)
 #' @param flag Flag this message (e.g. error or warning) (logical, optional)
+#' @param flush Immediately flush output to file (logical, optional)
 #' @return Invisible success (TRUE) or failure (FALSE).
 #' @details Logs a message, which consists of zero or more printable objects.
 #' Simple objects (numeric and character) are printed together on a single
@@ -96,18 +97,22 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
 #' readLines(logfile)
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{closelog}}
-printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
+printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE, flush = FALSE) {
 
   # Sanity checks
   assert_that(is.numeric(level))
   assert_that(is.logical(ts))
   assert_that(is.logical(cr))
+  assert_that(is.logical(flag))
+  assert_that(is.logical(flush))
 
   args <- list(...)
 
   # Make sure there's an open log file available
   loginfo <- getloginfo()
-  if(is.null(loginfo)) return(invisible(FALSE))
+  if(is.null(loginfo)) {
+    return(invisible(FALSE))
+  }
 
   msg("Writing to ", loginfo$description)
 
@@ -155,6 +160,10 @@ printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE) {
     }
 
     if(cr) cat("\n", file = file, append = TRUE)
+
+    if(flush) {
+      flush(file)   # force output to logfile
+    }
   } else {
     msg("Message level not high enough")
   }
