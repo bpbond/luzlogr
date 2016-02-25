@@ -24,7 +24,7 @@ LOGINFO <- ".loginfo"   # name of storage variable
 newlog <- function(logfile, loglevel, sink, description, closeit) {
 
   # Sanity checks
-  assert_that(is.character(logfile) | inherits(logfile, "connection"))
+  assert_that(inherits(logfile, "connection"))
   assert_that(is.numeric(loglevel))
   assert_that(is.logical(sink))
   assert_that(is.character(description))

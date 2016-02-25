@@ -49,8 +49,7 @@ test_that("openlog handles special cases", {
   open(test, "w")
   LOGFILE <- openlog(test, sink = FALSE)
   expect_true(isOpen(test))
-  closelog()
-  expect_true(isOpen(test))  # now closed and unavailable
+  close(test)  # this will screw up closelog()!
   expect_true(file.exists(LOGFILE))
   file.remove(LOGFILE)
 
@@ -61,7 +60,7 @@ test_that("openlog handles special cases", {
 #     printlog("hi")
 #     expect_warning(closelog())
 #  })
-  file.remove(LOGFILE)
+#  file.remove(LOGFILE)
 })
 
 test_that("Basic logging works correctly", {
@@ -143,6 +142,24 @@ test_that("Priority levels work correctly", {
   expect_equal(size2, size1)
   printlog("Line 1", level = 1)
   expect_more_than(file.size(LOGFILE), size2)
+
+  closelog()
+  file.remove(LOGFILE)
+})
+
+test_that("Directory change OK", {
+  LOGFILE <- openlog("test", sink = FALSE)
+
+  printlog("Line 1")
+  size0 <- file.size(LOGFILE)
+  olddir <- getwd()
+  setwd(tempdir())
+  printlog("Line 2")
+  size1 <- file.size(LOGFILE)
+  expect_more_than(size1, size0)
+  setwd(olddir)
+  printlog("Line 3")
+  expect_more_than(file.size(LOGFILE), size1)
 
   closelog()
   file.remove(LOGFILE)

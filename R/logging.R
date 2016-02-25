@@ -31,14 +31,11 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
   assert_that(is.logical(append))
   assert_that(is.logical(sink))
 
-  if(is.character(file)) {  # character filename
-    description <- file
-    closeit <- FALSE
-    if(file.exists(file) & !append) {
-      msg("Removing old ", file)
-      file.remove(file)
-    }
-  } else if(inherits(file, "connection")) {  # connection
+  if(is.character(file)) {
+    file <- file(file)  # THAT'S confusing! Change text filename to connection
+  }
+
+  if(inherits(file, "connection")) {  # connection
     closeit <- !isOpen(file)
     if(!isOpen(file)) {
       msg("Opening connection")
@@ -58,7 +55,7 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
          description = description, closeit = closeit)
 
   printlog("Opening", description, level = Inf)
-  invisible(description)
+  invisible(normalizePath(description))
 } # openlog
 
 # -----------------------------------------------------------------------------
