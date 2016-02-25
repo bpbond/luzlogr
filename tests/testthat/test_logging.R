@@ -131,6 +131,11 @@ test_that("closelog works correctly", {
 })
 
 test_that("Priority levels work correctly", {
+
+  # file.size() is unreliable on Windows until file is closed
+  # (or maybe it's file.info(); see top of file)
+  skip_on_os("windows")
+
   LOGFILE <- openlog("test", loglevel = 0, sink = FALSE)
 
   size0 <- file.size(LOGFILE)
@@ -148,6 +153,11 @@ test_that("Priority levels work correctly", {
 })
 
 test_that("Directory change OK", {
+
+  # file.size() is unreliable on Windows until file is closed
+  # (or maybe it's file.info(); see top of file)
+  skip_on_os("windows")
+
   LOGFILE <- openlog("test", sink = FALSE)
 
   printlog("Line 1")
