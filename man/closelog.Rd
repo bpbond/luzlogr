@@ -17,7 +17,9 @@ Close current logfile
 }
 \details{
 Close current logfile. The number of flagged messages is returned,
-invisibly.
+invisibly. Note that if \code{options(luzlogr.close_on_error = TRUE)} is set, then
+if an error occurs, all log files will be automatically closed. This behavior
+is not currently enabled by default.
 
 Logs are stored on a stack, and so when one is closed, logging
 output returns to the previous log (if any).

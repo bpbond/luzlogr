@@ -182,7 +182,9 @@ flaglog <- function(...) printlog(..., flag = TRUE)
 #' @param sessionInfo Append \code{\link{sessionInfo}} output? (logical, optional)
 #' @return Number of flagged messages (numeric).
 #' @details Close current logfile. The number of flagged messages is returned,
-#' invisibly.
+#' invisibly. Note that if \code{options(luzlogr.close_on_error = TRUE)} is set, then
+#' if an error occurs, all log files will be automatically closed. This behavior
+#' is not currently enabled by default.
 #'
 #' Logs are stored on a stack, and so when one is closed, logging
 #' output returns to the previous log (if any).
@@ -204,9 +206,6 @@ closelog <- function(sessionInfo = TRUE) {
   loginfo <- getloginfo()
   if(is.null(loginfo)) return(invisible(NULL))
 
-  if(is.character(loginfo$logfile))
-    description <- basename(loginfo$logfile)
-  else
     description <- summary(loginfo$logfile)$description
 
   printlog("Closing", description, "flags =", loginfo$flags, level = Inf)
@@ -221,7 +220,9 @@ closelog <- function(sessionInfo = TRUE) {
   }
 
   # Close file or connection, if necessary
-  if(loginfo$closeit) close(loginfo$logfile)
+  if(loginfo$closeit) {
+    close(loginfo$logfile)
+  }
 
   # Remove log from internal data structure
   removelog()

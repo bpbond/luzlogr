@@ -54,13 +54,13 @@ test_that("openlog handles special cases", {
   file.remove(LOGFILE)
 
   # Detect sink mismatch correctly
-#  capture.output({
-#     LOGFILE <- openlog("test", sink = TRUE)
-#     sink()
-#     printlog("hi")
-#     expect_warning(closelog())
-#  })
-#  file.remove(LOGFILE)
+  #  capture.output({
+  #     LOGFILE <- openlog("test", sink = TRUE)
+  #     sink()
+  #     printlog("hi")
+  #     expect_warning(closelog())
+  #  })
+  #  file.remove(LOGFILE)
 })
 
 test_that("Basic logging works correctly", {
@@ -163,4 +163,17 @@ test_that("Directory change OK", {
 
   closelog()
   file.remove(LOGFILE)
+})
+
+test_that("all log files closed on error", {
+  skip("don't know how to test this, because testthat traps errors!")
+
+  detach("package:luzlogr", unload=TRUE)
+  options(luzlogr.close_on_error = TRUE)
+  library(luzlogr)
+
+  nl <- nlogs()
+  openlog("test", sink = FALSE)
+  expect_error(stop())
+  expect_equal(nlogs(), nl)
 })
