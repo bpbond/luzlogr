@@ -1,8 +1,8 @@
 Package: luzlogr
 Type: Package
 Title: Lightweight Logging for R Scripts
-Version: 0.2
-Date: 2015-09-29
+Version: 0.2.0
+Date: 2016-02-25
 Authors@R: person("Ben", "Bond-Lamberty", email = "bondlamberty@pnnl.gov", role = c("aut", "cre"))
 Maintainer: Ben Bond-Lamberty <bondlamberty@pnnl.gov>
 Description: Provides flexible but lightweight logging facilities for R scripts.

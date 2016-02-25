@@ -2,12 +2,12 @@
 Lightweight logging for R scripts.
 
 [![Travis-CI Build Status](https://travis-ci.org/bpbond/luzlogr.svg?branch=master)](https://travis-ci.org/bpbond/luzlogr)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/luzlogr)](http://cran.r-project.org/web/packages/luzlogr)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/luzlogr)](http://cran.r-project.org/package=luzlogr)
 ![CRAN_Downloads_Badge](http://cranlogs.r-pkg.org/badges/luzlogr)
 
 ## Installing
 
-**luzlogr** is available from [CRAN](http://cran.r-project.org/web/packages/luzlogr/index.html), and can be installed using `install.packages()`. To install the latest, developmental version from this GitHub repository:
+**luzlogr** is available from [CRAN](http://cran.r-project.org/package=luzlogr), and can be installed using `install.packages()`. To install the latest, developmental version from this GitHub repository:
 
 1. Make sure you have `devtools` installed from CRAN and loaded.
 2. `install_github("bpbond/luzlogr")`
