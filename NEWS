@@ -1,3 +1,9 @@
+luzlogr 0.2
+===========
+
+* Added option to automatically close all log files if an error occurs; see ?closelog.
+
+
 luzlogr 0.1.3
 ===========
 
