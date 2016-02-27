@@ -109,6 +109,14 @@ for(i in seq_along(lg)) cat(lg[i], "\n")
 
 So far, only messages sent via `printlog()` appear in the log. We might, however, want to capture *everything*^[Almost. Messages, warnings, and errors will not appear; but see `?sink` and its `type = "message"` parameter.] produced by a script. To do this, use the `sink = TRUE` option of `openlog()`.
 
+### Errors and logs
+
+If an error occurs in your script, any log files will by default remain open. If using a single log file, it's easy to put a statement such as `suppressWarnings(closelog())` at the start of your script. Alternatively, you can tell **luzlogr** to close all open logs if an error occurs:
+
+```{r, eval=FALSE}
+options(luzlogr.close_on_error = TRUE)
+```
+
 ### Logging to a connection
 
 Logs can also be sent to any R [connection](https://stat.ethz.ch/R-manual/R-devel/library/base/html/connections.html): a pipe, compressed file, URL, etc.
