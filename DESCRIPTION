@@ -1,10 +1,8 @@
 Package: luzlogr
 Type: Package
 Title: Lightweight Logging for R Scripts
-Version: 0.2.0
-Date: 2016-02-25
+Version: 0.2.1
 Authors@R: person("Ben", "Bond-Lamberty", email = "bondlamberty@pnnl.gov", role = c("aut", "cre"))
-Maintainer: Ben Bond-Lamberty <bondlamberty@pnnl.gov>
 Description: Provides flexible but lightweight logging facilities for R scripts.
     Supports priority levels for logs and messages, flagging messages, capturing
     script output, switching logs, and logging to files or connections.
@@ -13,10 +11,10 @@ Imports:
 Depends:
     R (>= 3.0)
 License: MIT + file LICENSE
-LazyData: TRUE
+Encoding: UTF-8
 Suggests:
     testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 7.3.1

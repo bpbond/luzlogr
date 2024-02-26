@@ -13,4 +13,3 @@ Number of current logs (numeric).
 Return number of current logs
 }
 \keyword{internal}
-

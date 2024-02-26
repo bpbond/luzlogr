@@ -16,4 +16,3 @@ Get current log info
 This handles internal data tracking only, not the file on disk.
 }
 \keyword{internal}
-

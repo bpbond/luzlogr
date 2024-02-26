@@ -37,8 +37,8 @@ logfile <- openlog("test.log")
 printlog("message")
 closelog()
 readLines(logfile)
+file.remove(logfile)
 }
 \seealso{
 \code{\link{printlog}} \code{\link{closelog}}
 }
-

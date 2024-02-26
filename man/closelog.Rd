@@ -30,14 +30,14 @@ If the log was being written to a \code{\link{connection}},
 whether open or closed.
 }
 \examples{
-logfile <- openlog("A.log")
+logfile1 <- openlog("A.log")
 printlog("message to A", flag = TRUE)
-logfile <- openlog("B.log")
+logfile2 <- openlog("B.log")
 printlog("message to B")
 flagcountB <- closelog()
 flagcountA <- closelog(sessionInfo = FALSE)
+file.remove(logfile1, logfile2)
 }
 \seealso{
 \code{\link{openlog}} \code{\link{printlog}}
 }
-

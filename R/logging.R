@@ -7,6 +7,7 @@
 #' @param loglevel Minimum priority level (numeric, optional)
 #' @param append Append to logfile? (logical, optional)
 #' @param sink Send all console output to logfile? (logical, optional)
+#' @importFrom assertthat assert_that
 #' @return Invisible fully-qualified name of log file.
 #' @details Open a new logfile. Messages will only appear in the logfile
 #' if their \code{level} exceeds the log's \code{loglevel};
@@ -22,6 +23,7 @@
 #' printlog("message")
 #' closelog()
 #' readLines(logfile)
+#' file.remove(logfile)
 #' @export
 #' @seealso \code{\link{printlog}} \code{\link{closelog}}
 openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
@@ -89,12 +91,14 @@ openlog <- function(file, loglevel = -Inf, append = FALSE, sink = FALSE) {
 #' printlog(1, "plus", 1, "equals", 1 + 1)
 #' closelog()
 #' readLines(logfile)
+#' file.remove(logfile)
 #'
 #' logfile <- openlog("test", loglevel = 1)
 #' printlog("This message will not appear", level = 0)
 #' printlog("This message will appear", level = 1)
 #' closelog()
 #' readLines(logfile)
+#' file.remove(logfile)
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{closelog}}
 printlog <- function(..., level = 0, ts = TRUE, cr = TRUE, flag = FALSE, flush = FALSE) {
@@ -192,12 +196,13 @@ flaglog <- function(...) printlog(..., flag = TRUE)
 #' \code{closelog} will return the connection to its pre-logging state,
 #' whether open or closed.
 #' @examples
-#' logfile <- openlog("A.log")
+#' logfile1 <- openlog("A.log")
 #' printlog("message to A", flag = TRUE)
-#' logfile <- openlog("B.log")
+#' logfile2 <- openlog("B.log")
 #' printlog("message to B")
 #' flagcountB <- closelog()
 #' flagcountA <- closelog(sessionInfo = FALSE)
+#' file.remove(logfile1, logfile2)
 #' @export
 #' @seealso \code{\link{openlog}} \code{\link{printlog}}
 closelog <- function(sessionInfo = TRUE) {

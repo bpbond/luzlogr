@@ -7,9 +7,9 @@
 setlogdata(datum, value)
 }
 \arguments{
-\item{value}{Value}
+\item{datum}{Name of datum to set (character)}
 
-\item{logdata}{Name of datum to set (character)}
+\item{value}{Value}
 }
 \description{
 Set log data
@@ -18,4 +18,3 @@ Set log data
 This handles internal data tracking only, not the file on disk.
 }
 \keyword{internal}
-

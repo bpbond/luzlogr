@@ -24,4 +24,3 @@ Create new log
 This handles internal data tracking only, not the file on disk.
 }
 \keyword{internal}
-
