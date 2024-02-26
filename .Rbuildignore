@@ -4,3 +4,4 @@ output/
 ^\.travis\.yml$
 
 cran-comments.md
+^CRAN-SUBMISSION$
