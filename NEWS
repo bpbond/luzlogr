@@ -1,7 +1,9 @@
 luzlogr 0.2.1
 ===========
 
-* Updated the package for modern CRAN policies and fixed a couple minor issues.
+* Updated the package for modern CRAN policies (canonical URLs, etc).
+* Fixed a couple minor issues in the examples.
+* Removed all Travis-CI references.
 
 
 luzlogr 0.2

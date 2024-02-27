@@ -6,7 +6,7 @@
 
 ## R CMD check results
 
-Locally there were no ERRORs or WARNINGs or NOTEs. 
+No ERRORs or WARNINGs or NOTEs. 
 
 ## Downstream dependencies
 

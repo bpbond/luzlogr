@@ -2,12 +2,14 @@ Package: luzlogr
 Type: Package
 Title: Lightweight Logging for R Scripts
 Version: 0.2.1
-Authors@R: person("Ben", "Bond-Lamberty", email = "bondlamberty@pnnl.gov", role = c("aut", "cre"))
+Authors@R: 
+    person("Ben", "Bond-Lamberty", email = "bondlamberty@pnnl.gov",
+        role = c("cre", "aut"), comment = c(ORCID = "0000-0001-9525-4633"))
 Description: Provides flexible but lightweight logging facilities for R scripts.
     Supports priority levels for logs and messages, flagging messages, capturing
     script output, switching logs, and logging to files or connections.
 Imports:
-    assertthat (>= 0.1)
+    assertthat (>= 0.2)
 Depends:
     R (>= 3.0)
 License: MIT + file LICENSE
